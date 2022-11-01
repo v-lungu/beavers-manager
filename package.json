@@ -1,0 +1,7 @@
+{
+  "name": "beaver-scout-app",
+  "version": "1.0.0",
+  "description": "CPSC 304 project",
+  "main": "index.js",
+  "license": "MIT"
+}
