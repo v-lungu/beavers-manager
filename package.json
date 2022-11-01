@@ -9,12 +9,15 @@
     "dev:web": "lerna run dev --scope web",
     "dev:api": "lerna run dev --scope api"
   },
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "lerna": "^6.0.1"
   },
   "devDependencies": {
-    "concurrently": "^7.5.0"
+    "concurrently": "^7.5.0",
+    "eslint": "^8.26.0"
   },
   "private": true
 }
