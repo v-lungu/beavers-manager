@@ -3,5 +3,17 @@
   "version": "1.0.0",
   "description": "CPSC 304 project",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"lerna run dev --scope web --scope api\"",
+    "dev:web": "lerna run dev --scope web",
+    "dev:api": "lerna run dev --scope api"
+  },
+  "workspaces": ["packages/*"],
+  "dependencies": {
+    "lerna": "^6.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.5.0"
+  }
 }
