@@ -12,6 +12,14 @@
   align-items: center;
 }
 
+.background {
+  position: relative;
+  min-height: 250px;
+  background-size: cover;
+  background-position: center top;
+
+}
+
 .footer {
   display: flex;
   flex: 1;
@@ -43,11 +51,13 @@
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
+  color: #eb0b2b;
 }
 
 .title,
 .description {
   text-align: center;
+  width: 1000px;
 }
 
 .description {
@@ -88,8 +98,8 @@
 .card:hover,
 .card:focus,
 .card:active {
-  color: #0070f3;
-  border-color: #0070f3;
+  color: #eb0b2b;
+  border-color: #eb0b2b;
 }
 
 .card h2 {
