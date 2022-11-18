@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
@@ -21,41 +22,33 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
+          <Link href="/logs" className={styles.card}>
             <h2>Logs &rarr;</h2>
             <p>
               Find in-depth information on badges, songs, skits, & meetings.
             </p>
-          </a>
+          </Link>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
+          <Link href="/beavers" className={styles.card}>
             <h2>Beavers &rarr;</h2>
             <p>Review and manage each Beaver's profile, grade and tailcolor!</p>
-          </a>
+          </Link>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
+          <Link href="/leaders" className={styles.card}>
             <h2>Leaders &rarr;</h2>
             <p>
               Discover and review each Leader's profile, colony and contact
               info!
             </p>
-          </a>
+          </Link>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
+          <Link href="/admin" className={styles.card}>
             <h2>Admin &rarr;</h2>
             <p>
               Leverage the full power to edit and manage badges, meetings and
               activities.
             </p>
-          </a>
+          </Link>
         </div>
       </main>
 
