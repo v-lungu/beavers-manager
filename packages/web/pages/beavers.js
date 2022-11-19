@@ -1,6 +1,8 @@
 import EnhancedTable from "../components/EnhancedTable";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import { Button } from "@mui/material";
+import { PersonAdd } from "@mui/icons-material";
 function createData(name, grade, tailcolor) {
   return {
     name,
@@ -44,10 +46,28 @@ const headCells = [
 
 const headLabels = ["Name", "Grade", "Tail Color"];
 export default function Beaver() {
+  const handleOnClick = () => {
+    //call endpoint
+  };
   return (
     <>
       <div className={styles.background}>
         <Image src="/kid.jpg" alt="background" fill />
+      </div>
+      <div>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#eb0b2b",
+            margin: 4,
+            position: "absolute",
+            right: 10,
+          }}
+          onClick={handleOnClick}
+          endIcon={<PersonAdd />}
+        >
+          Add Beaver
+        </Button>
       </div>
       <EnhancedTable
         headCells={headCells}

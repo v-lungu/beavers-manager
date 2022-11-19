@@ -25,7 +25,7 @@ import { visuallyHidden } from "@mui/utils";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#eb0b2b",
+    backgroundColor: "#17316d",
     fontSize: 18,
     fontWeight: "bold",
     color: theme.palette.common.white,
