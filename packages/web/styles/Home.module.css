@@ -17,6 +17,9 @@
   min-height: 250px;
   background-size: cover;
   background-position: center top;
+}
+.textContainer {
+  padding: 2rem 0;
 
 }
 

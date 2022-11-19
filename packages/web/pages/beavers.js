@@ -1,8 +1,11 @@
 import EnhancedTable from "../components/EnhancedTable";
+import EnhancedModal from "../components/EnhancedModal";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Button } from "@mui/material";
 import { PersonAdd } from "@mui/icons-material";
+import * as React from "react";
+
 function createData(name, grade, tailcolor) {
   return {
     name,
@@ -46,9 +49,10 @@ const headCells = [
 
 const headLabels = ["Name", "Grade", "Tail Color"];
 export default function Beaver() {
-  const handleOnClick = () => {
-    //call endpoint
-  };
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       <div className={styles.background}>
@@ -63,7 +67,7 @@ export default function Beaver() {
             position: "absolute",
             right: 10,
           }}
-          onClick={handleOnClick}
+          onClick={handleOpen}
           endIcon={<PersonAdd />}
         >
           Add Beaver
@@ -75,7 +79,11 @@ export default function Beaver() {
         rows={rows}
         headLabels={headLabels}
       />
-      );
+      <EnhancedModal
+        handleClose={handleClose}
+        open={open}
+        title="Create New Beaver"
+      />
     </>
   );
 }
