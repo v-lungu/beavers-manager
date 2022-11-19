@@ -341,5 +341,4 @@ EnhancedTable.propTypes = {
   headCells: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
-  headLabels: PropTypes.array.isRequired,
 };
