@@ -8,7 +8,6 @@ import {
   InputLabel,
   MenuItem,
   Button,
-  Icon,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import * as React from "react";
@@ -28,7 +27,8 @@ const style = {
 };
 
 export default function EnhancedModal(props) {
-  const { handleClose, open, title } = props;
+  const { handleClose, open, title, create = false } = props;
+  const buttonText = create ? "Add" : "Edit";
 
   const [formInput, setFormInput] = React.useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -65,8 +65,11 @@ export default function EnhancedModal(props) {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {title}
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          *Fill in beaver information*
+        <Typography
+          id="modal-modal-description"
+          sx={{ mt: 2, fontWeight: "bold" }}
+        >
+          Fill in beaver information
         </Typography>
         <div className={styles.textContainer}>
           <TextField
@@ -110,40 +113,48 @@ export default function EnhancedModal(props) {
           </Select>
         </FormControl>
 
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          *Fill in guardian information*
-        </Typography>
-        <div className={styles.textContainer}>
-          <TextField
-            id="name-guardian"
-            label="Name"
-            sx={{ mb: 2 }}
-            name="guardianName"
-            onChange={handleInput}
-          />
-          <TextField
-            id="phone"
-            label="Phone"
-            sx={{ mb: 2 }}
-            name="phone"
-            onChange={handleInput}
-          />
-          <TextField
-            required
-            id="email"
-            label="Email"
-            name="email"
-            onChange={handleInput}
-          />
-        </div>
+        {create && (
+          <>
+            <Typography
+              id="modal-modal-description"
+              sx={{ mt: 2, fontWeight: "bold" }}
+            >
+              Fill in guardian information
+            </Typography>
+            <div className={styles.textContainer}>
+              <TextField
+                id="name-guardian"
+                label="Name"
+                sx={{ mb: 2 }}
+                name="guardianName"
+                onChange={handleInput}
+              />
+              <TextField
+                id="phone"
+                label="Phone"
+                sx={{ mb: 2 }}
+                name="phone"
+                onChange={handleInput}
+              />
+              <TextField
+                required
+                id="email"
+                label="Email"
+                name="email"
+                onChange={handleInput}
+              />
+            </div>{" "}
+          </>
+        )}
         <Button
           type="submit"
           variant="contained"
           sx={{
             backgroundColor: "#eb0b2b",
+            marginTop: 2,
           }}
         >
-          Add <SendIcon sx={{ width: 20, paddingLeft: 1 }} />
+          {buttonText} <SendIcon sx={{ width: 20, paddingLeft: 1 }} />
         </Button>
       </Box>
     </Modal>

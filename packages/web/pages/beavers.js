@@ -6,32 +6,39 @@ import { Button } from "@mui/material";
 import { PersonAdd } from "@mui/icons-material";
 import * as React from "react";
 
-function createData(name, grade, tailcolor) {
+function createData(name, lastName, grade, tailcolor) {
   return {
     name,
+    lastName,
     grade,
     tailcolor,
   };
 }
 
 const rows = [
-  createData("Albert", 1, "green"),
-  createData("Alice", 2, "red"),
-  createData("Alex", 3, "blue"),
-  createData("Bob", 4, "green"),
-  createData("Kyle", 5, "purple"),
-  createData("Vlad", 6, "violet"),
-  createData("Anthony", 7, "yellow"),
-  createData("Emily", 8, "pink"),
-  createData("Amanda", 9, "blue"),
+  createData("Albert", "Bradley", 1, "green"),
+  createData("Alice", "Smith", 2, "red"),
+  createData("Alex", "Morris", 3, "blue"),
+  createData("Bob", "Bradley", 4, "green"),
+  createData("Kyle", "Bradley", 5, "purple"),
+  createData("Vlad", "Bradley", 6, "violet"),
+  createData("Anthony", "Bradley", 7, "yellow"),
+  createData("Emily", "Bradley", 8, "pink"),
+  createData("Amanda", "Bradley", 9, "blue"),
 ];
 
 const headCells = [
   {
-    id: "name",
+    id: "firstName",
     numeric: false,
     disablePadding: true,
-    label: "Name",
+    label: "First Name",
+  },
+  {
+    id: "lastName",
+    numeric: false,
+    disablePadding: true,
+    label: "Last Name",
   },
   {
     id: "grade",
@@ -83,6 +90,7 @@ export default function Beaver() {
         handleClose={handleClose}
         open={open}
         title="Create New Beaver"
+        create
       />
     </>
   );
