@@ -24,6 +24,7 @@ import { alpha } from "@mui/material/styles";
 import { FilterList, Delete, ModeEdit } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 import EnhancedModal from "./EnhancedModal";
+import FilterModal from "./FilterModal";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -123,8 +124,11 @@ function EnhancedTableToolbar(props) {
   const { selected, title } = props;
   const numSelected = selected.length;
   const [open, setOpen] = React.useState(false);
+  const [openFilter, setOpenFilter] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpenFilter = () => setOpenFilter(true);
+  const handleCloseFilter = () => setOpenFilter(false);
 
   const handleEdit = () => {
     if (numSelected === 1) {
@@ -184,7 +188,7 @@ function EnhancedTableToolbar(props) {
           </>
         ) : (
           <Tooltip title="Filter list">
-            <IconButton>
+            <IconButton onClick={handleOpenFilter}>
               <FilterList />
             </IconButton>
           </Tooltip>
@@ -195,6 +199,7 @@ function EnhancedTableToolbar(props) {
         open={open}
         title="Edit Beaver"
       />
+      <FilterModal handleClose={handleCloseFilter} open={openFilter} />
     </>
   );
 }
@@ -236,19 +241,19 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
+      const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -272,7 +277,7 @@ export default function EnhancedTable(props) {
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -302,14 +307,14 @@ export default function EnhancedTable(props) {
                   .sort(getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.name);
+                    const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     const cols = Object.keys(row);
 
                     return (
                       <StyledTableRow
                         hover
-                        onClick={(event) => handleClick(event, row.name)}
+                        onClick={(event) => handleClick(event, row.id)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
@@ -326,7 +331,8 @@ export default function EnhancedTable(props) {
                           />
                         </StyledTableCell>
                         {cols.map((col, idx) => {
-                          if (!idx) {
+                          if (!idx) return;
+                          if (idx == 1) {
                             return (
                               <StyledTableCell
                                 component="th"
