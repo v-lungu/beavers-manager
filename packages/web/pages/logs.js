@@ -3,8 +3,9 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import * as React from "react";
 
-function createData(name, eventType, eventName) {
+function createData(id, name, eventType, eventName) {
   return {
+    id,
     name,
     eventType,
     eventName,
@@ -12,9 +13,9 @@ function createData(name, eventType, eventName) {
 }
 
 const rows = [
-  createData("Albert", "Song", "Twinkle Twinkle", "abc@gmail.com"),
-  createData("Vlad", "Skit", "Skit #1", "abc@gmail.com"),
-  createData("Kyle", "Badge", "Forest", "abc@gmail.com"),
+  createData(1, "Albert", "Song", "Twinkle Twinkle", "abc@gmail.com"),
+  createData(2, "Vlad", "Skit", "Skit #1", "abc@gmail.com"),
+  createData(3, "Kyle", "Badge", "Forest", "abc@gmail.com"),
 ];
 
 const headCells = [

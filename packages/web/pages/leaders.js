@@ -3,8 +3,9 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import * as React from "react";
 
-function createData(name, colony, phone, email) {
+function createData(id, name, colony, phone, email) {
   return {
+    id,
     name,
     colony,
     phone,
@@ -13,9 +14,9 @@ function createData(name, colony, phone, email) {
 }
 
 const rows = [
-  createData("Albert", "colony 1", "1234", "abc@gmail.com"),
-  createData("Vlad", "colony 2", "1234", "abc@gmail.com"),
-  createData("Kyle", "colony 3", "1234", "abc@gmail.com"),
+  createData(1, "Albert", "colony 1", "1234", "abc@gmail.com"),
+  createData(2, "Vlad", "colony 2", "1234", "abc@gmail.com"),
+  createData(3, "Kyle", "colony 3", "1234", "abc@gmail.com"),
 ];
 
 const headCells = [
