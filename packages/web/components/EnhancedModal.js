@@ -27,8 +27,14 @@ const style = {
 };
 
 export default function EnhancedModal(props) {
-  const { handleClose, open, title, create = false } = props;
+  const { handleClose, open, title, create = false, selected } = props;
   const buttonText = create ? "Add" : "Edit";
+
+  const getDefaultName = () => {
+    if (selected && selected.length) {
+      return selected[0].split("-")[0];
+    }
+  };
 
   const [formInput, setFormInput] = React.useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -58,7 +64,19 @@ export default function EnhancedModal(props) {
       });
     };
 
-    createBeaver();
+    const editBeaver = async () => {
+      await fetch(`http://localhost:3001/beavers/${selected[0]}`, {
+        method: "put",
+        body: JSON.stringify(formInput),
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+
+    if (create) {
+      createBeaver();
+    } else if (selected && selected.length) {
+      editBeaver();
+    }
   };
   return (
     <Modal
@@ -85,6 +103,7 @@ export default function EnhancedModal(props) {
             name="name"
             sx={{ mb: 2 }}
             onChange={handleInput}
+            defaultValue={getDefaultName()}
           />
         </div>
         <FormControl fullWidth sx={{ mb: 2 }}>

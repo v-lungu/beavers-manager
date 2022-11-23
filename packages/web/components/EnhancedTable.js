@@ -207,6 +207,7 @@ function EnhancedTableToolbar(props) {
         handleClose={handleClose}
         open={open}
         title="Edit Beaver"
+        selected={selected}
       />
       <FilterModal handleClose={handleCloseFilter} open={openFilter} />
     </>

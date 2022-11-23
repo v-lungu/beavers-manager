@@ -29,7 +29,7 @@ function getHeadCells(beavers) {
 function parseBeavers(beavers) {
   if (!beavers.length) return;
   return beavers.map((beaver, idx) => ({
-    id: `${beaver.name}-${beaver.email}-${idx}`,
+    id: `${beaver.name}-${beaver.email}`,
     ...beaver,
   }));
 }

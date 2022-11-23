@@ -60,9 +60,22 @@ const createBeaver = (request, response) => {
   });
 };
 
+const editBeaver = (request, response) => {
+  const id = request.params.id;
+  const [nameId, emailId] = id.split("-");
+  const { grade } = request.body;
+
+  client.query("UPDATE beaver SET grade = $1 WHERE name = $2 AND email = $3", [
+    grade,
+    nameId,
+    emailId,
+  ]);
+};
+
 module.exports = {
   getBeavers,
   createBeaver,
   getGuardian,
   deleteGuardian,
+  editBeaver,
 };
