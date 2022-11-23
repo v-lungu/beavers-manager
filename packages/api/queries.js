@@ -14,11 +14,12 @@ const getBeavers = (request, response) => {
   });
 };
 
-const getGrades = (request, response) => {
-  client.query("SELECT * FROM grade", (error, results) => {
+const getGuardian = (request, response) => {
+  client.query("SELECT * FROM guardian", (error, results) => {
     if (error) {
       throw error;
     }
+    console.log(results.rows);
     response.status(200).json(results.rows);
   });
 };
@@ -48,11 +49,8 @@ const createBeaver = (request, response) => {
   });
 };
 
-// const getBeaverById = (request, response) => {
-//   const id = parseInt(request.params.id);
-// };
 module.exports = {
   getBeavers,
   createBeaver,
-  getGrades,
+  getGuardian,
 };

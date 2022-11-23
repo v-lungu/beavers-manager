@@ -9,10 +9,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Divider,
 } from "@mui/material";
 import { PersonAdd } from "@mui/icons-material";
 import * as React from "react";
 
+const BASE_URL = "http://localhost:3001/";
 function getHeadCells(beavers) {
   if (!beavers.length) return;
   const cols = Object.keys(beavers[0]);
@@ -31,9 +33,19 @@ function parseBeavers(beavers) {
     ...beaver,
   }));
 }
+
+function parseGuardians(guardians) {
+  if (!guardians.length) return;
+  return guardians.map((guardian) => ({
+    id: guardian.email,
+    ...guardian,
+  }));
+}
 export default function Beaver() {
   const [beaverRows, setBeaverRows] = React.useState([]);
   const [headCells, setHeadCells] = React.useState([]);
+  const [headGuardianCells, setHeadGuardianCells] = React.useState([]);
+  const [guardianRows, setGuardianRows] = React.useState([]);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -43,14 +55,25 @@ export default function Beaver() {
 
   React.useEffect(() => {
     const fetchBeavers = async () => {
-      const response = await fetch("http://localhost:3001/beavers");
+      const response = await fetch(`${BASE_URL}beavers`);
       const beavers = await response.json();
       const parsedBeavers = parseBeavers(beavers);
       setBeaverRows(parsedBeavers);
       const parsedHeadCells = getHeadCells(beavers);
       setHeadCells(parsedHeadCells);
     };
+
     fetchBeavers();
+
+    const fetchGuardian = async () => {
+      const response = await fetch(`${BASE_URL}guardians`);
+      const guardians = await response.json();
+      const parsedGuardians = parseGuardians(guardians);
+      setGuardianRows(parsedGuardians);
+      setHeadGuardianCells(getHeadCells(guardians));
+    };
+
+    fetchGuardian();
   }, []);
 
   return (
@@ -107,6 +130,12 @@ export default function Beaver() {
         </FormControl>
       </div>
       <EnhancedTable headCells={headCells} title="Beavers" rows={beaverRows} />
+      <Divider />
+      <EnhancedTable
+        headCells={headGuardianCells}
+        title="Guardians"
+        rows={guardianRows}
+      />
       <EnhancedModal
         handleClose={handleClose}
         open={open}
