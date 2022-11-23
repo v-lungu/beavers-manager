@@ -26,6 +26,7 @@ import { visuallyHidden } from "@mui/utils";
 import EnhancedModal from "./EnhancedModal";
 import FilterModal from "./FilterModal";
 
+const BASE_URL = "http://localhost:3001/";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#17316d",
@@ -136,7 +137,15 @@ function EnhancedTableToolbar(props) {
     }
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    if (title !== "Guardians") return;
+    const deleteGuardian = async () => {
+      await fetch(`${BASE_URL}guardians/${selected[0]}`, {
+        method: "delete",
+      });
+    };
+    deleteGuardian();
+  };
 
   return (
     <>

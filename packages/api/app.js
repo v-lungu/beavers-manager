@@ -10,6 +10,7 @@ const port = 3001;
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Methods", "*");
   next();
 });
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.get("/beavers", db.getBeavers);
 app.post("/beavers", db.createBeaver);
 app.get("/guardians", db.getGuardian);
+app.delete("/guardians/:email", db.deleteGuardian);
 
 app.listen(port, () => {
   console.log(`Beaver Scouts listening on port ${port} `);

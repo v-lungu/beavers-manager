@@ -58,8 +58,6 @@ export default function EnhancedModal(props) {
       });
     };
 
-    console.log(JSON.stringify(formInput));
-
     createBeaver();
   };
   return (

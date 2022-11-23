@@ -19,9 +19,20 @@ const getGuardian = (request, response) => {
     if (error) {
       throw error;
     }
-    console.log(results.rows);
     response.status(200).json(results.rows);
   });
+};
+
+const deleteGuardian = (request, response) => {
+  client.query(
+    "DELETE FROM guardian WHERE email = $1",
+    [request.params.email],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+    }
+  );
 };
 
 const createGuardianSQL =
@@ -53,4 +64,5 @@ module.exports = {
   getBeavers,
   createBeaver,
   getGuardian,
+  deleteGuardian,
 };
