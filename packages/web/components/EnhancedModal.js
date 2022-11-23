@@ -35,7 +35,6 @@ export default function EnhancedModal(props) {
     {
       name: "",
       grade: "",
-      tail: "",
       guardianName: "",
       email: "",
       phone: "",
@@ -51,8 +50,17 @@ export default function EnhancedModal(props) {
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    let data = { formInput };
-    console.log(data);
+    const createBeaver = async () => {
+      await fetch("http://localhost:3001/beavers", {
+        method: "post",
+        body: JSON.stringify(formInput),
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+
+    console.log(JSON.stringify(formInput));
+
+    createBeaver();
   };
   return (
     <Modal
@@ -75,12 +83,11 @@ export default function EnhancedModal(props) {
           <TextField
             required
             id="first-name-required"
-            label="First Name"
-            name="firstName"
+            label="Name"
+            name="name"
             sx={{ mb: 2 }}
             onChange={handleInput}
           />
-          <TextField id="last-name" label="Last Name" />
         </div>
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="grade-select-label">Grade</InputLabel>
@@ -92,24 +99,11 @@ export default function EnhancedModal(props) {
             name="grade"
             onChange={handleInput}
           >
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={30}>30</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="tail-select-label">Tail Color</InputLabel>
-          <Select
-            labelId="tail-select-label"
-            id="tail-select"
-            value={formInput.tailColor}
-            label="Tail Color"
-            name="tail"
-            onChange={handleInput}
-          >
-            <MenuItem value={"red"}>Red</MenuItem>
-            <MenuItem value={"green"}>Green</MenuItem>
-            <MenuItem value={"blue"}>Blue</MenuItem>
+            <MenuItem value={"SK"}>SK</MenuItem>
+            <MenuItem value={"JK"}>JK</MenuItem>
+            <MenuItem value={"01"}>01</MenuItem>
+            <MenuItem value={"02"}>02</MenuItem>
+            <MenuItem value={"02"}>02</MenuItem>
           </Select>
         </FormControl>
 

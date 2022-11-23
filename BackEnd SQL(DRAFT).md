@@ -18,9 +18,11 @@ Note: Command Shift K to view in prieview
 `DELETE FROM beaver where name = 'Kyle';`
 
 `DELETE FROM guardian where email = ‘mr_jake@gmail.com’ `
+
 - because of ON DELETE CASCADE clause in beaver, any guardian deleted will also delete the beaver
 
 ## **UPDATE operation**
+
 Single attribute update:
 
 `UPDATE beaver SET name = 'Alice WHERE name = 'Kyle';`
@@ -65,10 +67,9 @@ List of beavers with tailColor that is blue
 `GROUP BY guardian.email` <br>
 `HAVING count(*) > 1;`
 
-
 ## **NESTED AGGREGATION**
-TBD
 
+TBD
 
 ## **DIVISION**
 
@@ -77,5 +78,5 @@ TBD
 `WHERE NOT EXISTS (SELECT badge.name` <br>
 `FROM badge` <br>
 `WHERE NOT EXISTS (SELECT BP.email` <br>
-    `FROM beaverbadgeprogress BP` <br>
-    `WHERE bp.badge_name = badge.name AND BP.email = B.email AND bp.beaver_name = B.name));`
+`FROM beaverbadgeprogress BP` <br>
+`WHERE bp.badge_name = badge.name AND BP.email = B.email AND bp.beaver_name = B.name));`

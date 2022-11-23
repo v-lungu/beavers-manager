@@ -7,6 +7,12 @@ const app = express();
 
 const port = 3001;
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -19,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/beavers", db.getBeavers);
+app.post("/beavers", db.createBeaver);
 
 app.listen(port, () => {
   console.log(`Beaver Scouts listening on port ${port} `);

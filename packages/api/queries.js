@@ -14,6 +14,45 @@ const getBeavers = (request, response) => {
   });
 };
 
+const getGrades = (request, response) => {
+  client.query("SELECT * FROM grade", (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
+
+const createGuardianSQL =
+  "INSERT INTO guardian(email, name, phone_number) values ($1, $2, $3);";
+const createBeaverSQL =
+  "INSERT INTO beaver (name, email, grade) values ($1, $2, $3);";
+
+const createBeaver = (request, response) => {
+  const { name, email, grade, phone, guardianName } = request.body;
+
+  client.query(
+    createGuardianSQL,
+    [email, guardianName, phone],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+    }
+  );
+
+  client.query(createBeaverSQL, [name, email, grade], (error, results) => {
+    if (error) {
+      throw error;
+    }
+  });
+};
+
+// const getBeaverById = (request, response) => {
+//   const id = parseInt(request.params.id);
+// };
 module.exports = {
   getBeavers,
+  createBeaver,
+  getGrades,
 };
