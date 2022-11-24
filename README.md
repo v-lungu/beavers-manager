@@ -1,3 +1,5 @@
+# **No Extra Information**
+
 # Welcome to Beaver Scout Management Program (**BSMP**)!
 
 This application stores information on Beaver Scouts, a co-ed youth organization that offers children indoor programming and outdoor adventures to prepare them for success in the world.
@@ -13,19 +15,19 @@ BSMP can be used by scout leaders to:
 
 ## TODO
 
-- [ ] Front end
-  - [ ] Create all tabs
-  - [ ] Create table template
-  - [ ] Create relevant API requests
-- [ ] Back end
-  - [ ] Server
-  - [ ] Set up Express Database
-  - [ ] Create relevant endpoints
-- [ ] Database
-  - [ ] Create PostGres database
-  - [ ] Add all relevant tables to db
-  - [ ] Populate tables
-  - [ ] Write relevant queries
+- [x] Front end
+  - [x] Create all tabs
+  - [x] Create table template
+  - [x] Create relevant API requests
+- [x] Back end
+  - [x] Server
+  - [x] Set up Express Database
+  - [x] Create relevant endpoints
+- [x] Database
+  - [x] Create PostGres database
+  - [x] Add all relevant tables to db
+  - [x] Populate tables
+  - [x] Write relevant queries
 
 ## Challenges
 
