@@ -26,10 +26,14 @@ app.get("/", (req, res) => {
 });
 
 app.get("/beavers", db.getBeavers);
+app.get("/beavers/:id", db.getBeaver);
 app.post("/beavers", db.createBeaver);
 app.get("/guardians", db.getGuardian);
 app.delete("/guardians/:email", db.deleteGuardian);
 app.put("/beavers/:id", db.editBeaver);
+app.get("/grade-statistics", db.getGradeStatistics);
+app.get("/overworked-guardians", db.getOverworkedGuardians);
+app.get("/eager-beaver-guardians", db.getGuardiansWithEagerBeavers);
 
 app.listen(port, () => {
   console.log(`Beaver Scouts listening on port ${port} `);

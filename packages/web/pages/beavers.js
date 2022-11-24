@@ -1,17 +1,18 @@
 import EnhancedTable from "../components/EnhancedTable";
 import EnhancedModal from "../components/EnhancedModal";
+import CompactTable from "../components/CompactTable";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
 import {
   Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Divider,
+  Typography,
+  Box,
+  Card,
+  CardContent,
 } from "@mui/material";
-import { PersonAdd } from "@mui/icons-material";
+import { PersonAdd, Insights } from "@mui/icons-material";
 import * as React from "react";
 
 const BASE_URL = "http://localhost:3001/";
@@ -53,6 +54,10 @@ export default function Beaver() {
   const [headGuardianCells, setHeadGuardianCells] = React.useState([]);
   const [guardianRows, setGuardianRows] = React.useState([]);
   const [beaverDetails, setBeaverDetails] = React.useState(null);
+  const [gradeStatistics, setGradeStatistics] = React.useState(null);
+  const [overworkedGuardians, setOverworkedGuardians] = React.useState(null);
+  const [guardiansWithEagerBeavers, setGuardiansWithEagerBeavers] =
+    React.useState(null);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -79,7 +84,31 @@ export default function Beaver() {
     setHeadGuardianCells(getHeadCells(guardians));
   };
 
-  const fetchBeaverDetails = async (email, name) => {};
+  const fetchBeaverDetails = async (id) => {
+    const url = `${BASE_URL}beavers/${id}`;
+    const beavers = await fetchJson(url);
+    const parsedBeavers = parseBeavers(beavers);
+    setBeaverDetails(parsedBeavers[0]);
+  };
+
+  const fetchGradeStatistics = async () => {
+    const statistics = await fetchJson(`${BASE_URL}grade-statistics`);
+    setGradeStatistics(statistics);
+  };
+
+  const fetchOverworkedGuardians = async () => {
+    const overworkedGuardians = await fetchJson(
+      `${BASE_URL}overworked-guardians`
+    );
+    setOverworkedGuardians(overworkedGuardians);
+  };
+
+  const fetchGuardiansWithEagerBeavers = async () => {
+    const guardiansWithEagerBeavers = await fetchJson(
+      `${BASE_URL}eager-beaver-guardians`
+    );
+    setGuardiansWithEagerBeavers(guardiansWithEagerBeavers);
+  };
 
   React.useEffect(() => {
     fetchBeavers();
@@ -91,7 +120,11 @@ export default function Beaver() {
   };
 
   const handleBeaverSelected = (beaver) => {
-    console.log(beaver);
+    if (beaver.length) {
+      fetchBeaverDetails(beaver[0]);
+    } else {
+      setBeaverDetails(null);
+    }
   };
 
   const handleGuardianColumnSelected = (columns) => {
@@ -107,10 +140,43 @@ export default function Beaver() {
         <Button
           variant="contained"
           sx={{
+            backgroundColor: "#a6bc8",
+            margin: 2,
+          }}
+          onClick={fetchOverworkedGuardians}
+          endIcon={<Insights />}
+        >
+          Get Overworked Guardians
+        </Button>
+
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#a6bc8",
+            margin: 2,
+          }}
+          onClick={fetchGuardiansWithEagerBeavers}
+          endIcon={<Insights />}
+        >
+          Get Guardians of Eager Beavers
+        </Button>
+
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#a6bc8",
+            margin: 2,
+          }}
+          onClick={fetchGradeStatistics}
+          endIcon={<Insights />}
+        >
+          Get Grade Statistics
+        </Button>
+
+        <Button
+          variant="contained"
+          sx={{
             backgroundColor: "#eb0b2b",
-            margin: 4,
-            position: "absolute",
-            right: 10,
           }}
           onClick={handleOpen}
           endIcon={<PersonAdd />}
@@ -118,39 +184,22 @@ export default function Beaver() {
           Add Beaver
         </Button>
       </div>
-      <div>
-        <FormControl sx={{ margin: 2, width: 150, backgroundColor: "#f5f5f5" }}>
-          <InputLabel id="grade-select-label">Grade</InputLabel>
-          <Select
-            labelId="grade-select-label"
-            id="grade-select"
-            value={grade}
-            label="Grade"
-            name="grade"
-            onChange={(event) => setGrade(event.target.value)}
-          >
-            <MenuItem value={"one"}>One</MenuItem>
-            <MenuItem value={"two"}>Two</MenuItem>
-            <MenuItem value={"three"}>Three</MenuItem>
-          </Select>
-        </FormControl>
 
-        <FormControl sx={{ margin: 2, width: 150, backgroundColor: "#f5f5f5" }}>
-          <InputLabel id="color-select-label">Tail Color</InputLabel>
-          <Select
-            labelId="color-select-label"
-            id="color-select"
-            value={color}
-            label="color"
-            name="color"
-            onChange={(event) => setColor(event.target.value)}
-          >
-            <MenuItem value="blue">Blue</MenuItem>
-            <MenuItem value="red">Red</MenuItem>
-            <MenuItem value="green">Green</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      {gradeStatistics && (
+        <CompactTable title="Grade Statistics" data={gradeStatistics} />
+      )}
+
+      {overworkedGuardians && (
+        <CompactTable title="Overworked Guardians" data={overworkedGuardians} />
+      )}
+
+      {guardiansWithEagerBeavers && (
+        <CompactTable
+          title="Guardians With Eager Beavers"
+          data={guardiansWithEagerBeavers}
+        />
+      )}
+
       <EnhancedTable
         headCells={headCells}
         title="Beavers"
@@ -158,13 +207,31 @@ export default function Beaver() {
         onColumnSelected={handleBeaverColumnSelected}
         onRowSelected={handleBeaverSelected}
       />
+
+      {beaverDetails && (
+        <Box sx={{ width: "80%", mx: 16, mb: 16, mt: -12 }}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Guardian</Typography>
+              <Typography sx={{ mb: 1.5 }}>
+                {beaverDetails.guardianname} ({beaverDetails.phone_number})
+              </Typography>
+              <Typography variant="h5">Tail Colour</Typography>
+              <Typography>{beaverDetails.tail_color}</Typography>
+            </CardContent>
+          </Card>
+        </Box>
+      )}
+
       <Divider />
+
       <EnhancedTable
         headCells={headGuardianCells}
         title="Guardians"
         rows={guardianRows}
         onColumnSelected={handleGuardianColumnSelected}
       />
+
       <EnhancedModal
         handleClose={handleClose}
         open={open}
