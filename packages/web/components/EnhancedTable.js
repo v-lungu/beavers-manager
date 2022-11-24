@@ -389,7 +389,7 @@ export default function EnhancedTable(props) {
                     height: 53 * emptyRows,
                   }}
                 >
-                  <StyledTableCell colSpan={6}>No Shit Found</StyledTableCell>
+                  <StyledTableCell colSpan={6}>No data found</StyledTableCell>
                 </TableRow>
               )}
               {emptyRows > 0 && (

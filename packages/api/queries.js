@@ -83,12 +83,19 @@ const createBeaverSQL =
 const createBeaver = async (request, response) => {
   const { name, email, grade, phone, guardianName } = request.body;
 
-  const existingGuardian = await client.query(
-    "SELECT * FROM guardian WHERE email = $1",
-    [email]
-  );
+  let existingGuardian;
+  try {
+    existingGuardian = await client.query(
+      "SELECT * FROM guardian WHERE email = $1",
+      [email]
+    );
+  } catch (error) {
+    console.log(
+      `Failed to find guardian for ${email}, attempting to create one...`
+    );
+  }
 
-  if (!existingGuardian) {
+  if (!existingGuardian?.rows?.length) {
     client.query(
       createGuardianSQL,
       [email, guardianName, phone],

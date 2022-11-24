@@ -142,6 +142,12 @@ export default function Beaver() {
     fetchBeavers(`column=${column}&operator=${operator}&value=${value}`);
   };
 
+  const handleCreateBeaver = () => {
+    handleClose();
+    fetchBeavers();
+    fetchGuardian();
+  };
+
   return (
     <>
       <div className={styles.background}>
@@ -265,12 +271,14 @@ export default function Beaver() {
         onColumnSelected={handleGuardianColumnSelected}
       />
 
-      <EnhancedModal
-        handleClose={handleClose}
-        open={open}
-        title="Create New Beaver"
-        create
-      />
+      {open && (
+        <EnhancedModal
+          handleClose={handleCreateBeaver}
+          open={true}
+          title="Create New Beaver"
+          create
+        />
+      )}
     </>
   );
 }

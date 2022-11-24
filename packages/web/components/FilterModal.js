@@ -63,11 +63,13 @@ export default function FilterModal(props) {
 
     setFormInput({ selectedColumns });
     onColumnSelected?.(selectedColumns);
+    handleClose();
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     onFiltered?.(formInput);
+    handleClose();
   };
 
   return (

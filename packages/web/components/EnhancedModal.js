@@ -55,7 +55,7 @@ export default function EnhancedModal(props) {
     setFormInput({ [name]: newValue });
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
 
     const createBeaver = async () => {
@@ -84,6 +84,8 @@ export default function EnhancedModal(props) {
 
       editBeaver();
     }
+
+    handleClose();
   };
   return (
     <Modal
