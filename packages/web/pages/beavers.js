@@ -11,6 +11,7 @@ import {
   Box,
   Card,
   CardContent,
+  Stack,
 } from "@mui/material";
 import { PersonAdd, Insights } from "@mui/icons-material";
 import * as React from "react";
@@ -58,6 +59,7 @@ export default function Beaver() {
   const [overworkedGuardians, setOverworkedGuardians] = React.useState(null);
   const [guardiansWithEagerBeavers, setGuardiansWithEagerBeavers] =
     React.useState(null);
+  const [completionistBeavers, setCompletionistBeavers] = React.useState(null);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -110,6 +112,11 @@ export default function Beaver() {
     setGuardiansWithEagerBeavers(guardiansWithEagerBeavers);
   };
 
+  const fetchCompletionistBeavers = async () => {
+    const completionistBeavers = await fetchJson(`${BASE_URL}completionists`);
+    setCompletionistBeavers(completionistBeavers);
+  };
+
   React.useEffect(() => {
     fetchBeavers();
     fetchGuardian();
@@ -131,17 +138,26 @@ export default function Beaver() {
     fetchGuardian(`columns=${columns.join(",")}`);
   };
 
+  const handleBeaverFiltered = ({ column, operator, value }) => {
+    fetchBeavers(`column=${column}&operator=${operator}&value=${value}`);
+  };
+
   return (
     <>
       <div className={styles.background}>
         <Image src="/kid.jpg" alt="background" fill />
       </div>
-      <div>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        sx={{ mt: 4 }}
+      >
         <Button
           variant="contained"
           sx={{
             backgroundColor: "#a6bc8",
-            margin: 2,
           }}
           onClick={fetchOverworkedGuardians}
           endIcon={<Insights />}
@@ -153,7 +169,6 @@ export default function Beaver() {
           variant="contained"
           sx={{
             backgroundColor: "#a6bc8",
-            margin: 2,
           }}
           onClick={fetchGuardiansWithEagerBeavers}
           endIcon={<Insights />}
@@ -165,7 +180,17 @@ export default function Beaver() {
           variant="contained"
           sx={{
             backgroundColor: "#a6bc8",
-            margin: 2,
+          }}
+          onClick={fetchCompletionistBeavers}
+          endIcon={<Insights />}
+        >
+          Get Completionist Beavers
+        </Button>
+
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#a6bc8",
           }}
           onClick={fetchGradeStatistics}
           endIcon={<Insights />}
@@ -183,7 +208,7 @@ export default function Beaver() {
         >
           Add Beaver
         </Button>
-      </div>
+      </Stack>
 
       {gradeStatistics && (
         <CompactTable title="Grade Statistics" data={gradeStatistics} />
@@ -200,12 +225,20 @@ export default function Beaver() {
         />
       )}
 
+      {completionistBeavers && (
+        <CompactTable
+          title="Completionist Beavers"
+          data={completionistBeavers}
+        />
+      )}
+
       <EnhancedTable
         headCells={headCells}
         title="Beavers"
         rows={beaverRows}
         onColumnSelected={handleBeaverColumnSelected}
         onRowSelected={handleBeaverSelected}
+        onFiltered={handleBeaverFiltered}
       />
 
       {beaverDetails && (

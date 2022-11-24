@@ -30,7 +30,7 @@ const style = {
 };
 
 export default function FilterModal(props) {
-  const { handleClose, open, columns, onColumnSelected } = props;
+  const { handleClose, open, columns, onColumnSelected, onFiltered } = props;
   const [formInput, setFormInput] = React.useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
@@ -67,9 +67,7 @@ export default function FilterModal(props) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    let data = { formInput };
-    console.log(data);
+    onFiltered?.(formInput);
   };
 
   return (
@@ -112,57 +110,65 @@ export default function FilterModal(props) {
           </div>
         )}
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="grade-select-label">Column</InputLabel>
-          <Select
-            labelId="column-select-label"
-            id="column-select"
-            value={formInput.column}
-            label="Column"
-            name="column"
-            onChange={handleInput}
-          >
-            <MenuItem value={"name"}>Name</MenuItem>
-            <MenuItem value={"grade"}>Grade</MenuItem>
-            <MenuItem value={"tailColor"}>Tail Color</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="operator-select-label">Operator</InputLabel>
-          <Select
-            labelId="operator-select-label"
-            id="operator-select"
-            value={formInput.operator}
-            label="Operator"
-            name="operator"
-            onChange={handleInput}
-          >
-            <MenuItem value={"equals"}>equals</MenuItem>
-            <MenuItem value={"notEquals"}>not equals</MenuItem>
-            <MenuItem value={"greaterThan"}>greater than</MenuItem>
-            <MenuItem value={"lessThan"}>less than</MenuItem>
-          </Select>
-        </FormControl>
-        <div className={styles.textContainer}>
-          <TextField
-            id="name-guardian"
-            label="Value"
-            sx={{ mb: 2 }}
-            name="value"
-            onChange={handleInput}
-          />
-        </div>
+        {onFiltered && (
+          <>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Filter Columns
+            </Typography>
 
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            backgroundColor: "#eb0b2b",
-            marginTop: 2,
-          }}
-        >
-          Filter <FilterList sx={{ width: 20, paddingLeft: 1 }} />
-        </Button>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="grade-select-label">Column</InputLabel>
+              <Select
+                labelId="column-select-label"
+                id="column-select"
+                value={formInput.column}
+                label="Column"
+                name="column"
+                onChange={handleInput}
+              >
+                {columns.map((column) => (
+                  <MenuItem key={column} value={column}>
+                    {column}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="operator-select-label">Operator</InputLabel>
+              <Select
+                labelId="operator-select-label"
+                id="operator-select"
+                value={formInput.operator}
+                label="Operator"
+                name="operator"
+                onChange={handleInput}
+              >
+                <MenuItem value="equals">equals</MenuItem>
+                <MenuItem value="notEquals">not equals</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <TextField
+                id="name-guardian"
+                label="Value"
+                sx={{ mb: 2 }}
+                name="value"
+                onChange={handleInput}
+              />
+            </FormControl>
+
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#eb0b2b",
+              }}
+            >
+              Filter <FilterList sx={{ width: 20, paddingLeft: 1 }} />
+            </Button>
+          </>
+        )}
       </Box>
     </Modal>
   );

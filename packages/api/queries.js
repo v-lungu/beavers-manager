@@ -5,14 +5,36 @@ const client = new Client({
 
 client.connect();
 
+const getQueryParam = (request, param) => request?.query?.[param] ?? null;
+
+const OPERATORS = {
+  equals: "=",
+  notEquals: "!=",
+};
+
 const getBeavers = (request, response) => {
-  const columns = request?.query?.columns ?? "*";
-  client.query(`SELECT ${columns} FROM beaver`, (error, results) => {
-    if (error) {
-      throw error;
+  const columns = getQueryParam(request, "columns") ?? "*";
+
+  const column = getQueryParam(request, "column");
+  const rawOperator = getQueryParam(request, "operator");
+  const value = getQueryParam(request, "value");
+  let whereClause = "";
+  if (column && rawOperator && value) {
+    const operator = OPERATORS[rawOperator];
+    if (operator) {
+      whereClause = `WHERE ${column} ${operator} '${value}'`;
     }
-    response.status(200).json(results.rows);
-  });
+  }
+
+  client.query(
+    `SELECT ${columns} FROM beaver ${whereClause}`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
 };
 
 const getBeaver = (request, response) => {
@@ -141,6 +163,18 @@ const getGuardiansWithEagerBeavers = (request, response) => {
   );
 };
 
+getCompletionistBeavers = (request, response) => {
+  client.query(
+    "SELECT * FROM beaver WHERE NOT EXISTS (SELECT badge.name FROM badge WHERE NOT EXISTS (SELECT bbp.email FROM beaverbadgeprogress bbp WHERE bbp.badge_name = badge.name AND bbp.email = beaver.email AND bbp.beaver_name = beaver.name))",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 module.exports = {
   getBeavers,
   getBeaver,
@@ -151,4 +185,5 @@ module.exports = {
   getGradeStatistics,
   getOverworkedGuardians,
   getGuardiansWithEagerBeavers,
+  getCompletionistBeavers,
 };

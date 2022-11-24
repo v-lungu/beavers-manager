@@ -84,7 +84,7 @@ function EnhancedTableHead(props) {
             }}
           />
         </StyledTableCell>
-        {headCells.map((headCell) => (
+        {headCells?.map((headCell) => (
           <StyledTableCell
             key={headCell.id}
             align={"left"}
@@ -118,11 +118,11 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-  headCells: PropTypes.array.isRequired,
+  headCells: PropTypes.array,
 };
 
 function EnhancedTableToolbar(props) {
-  const { selected, title, columns, onColumnSelected } = props;
+  const { selected, title, columns, onColumnSelected, onFiltered } = props;
   const numSelected = selected.length;
   const [open, setOpen] = React.useState(false);
   const [openFilter, setOpenFilter] = React.useState(false);
@@ -218,6 +218,7 @@ function EnhancedTableToolbar(props) {
         open={openFilter}
         columns={columns}
         onColumnSelected={onColumnSelected}
+        onFiltered={onFiltered}
       />
     </>
   );
@@ -248,7 +249,14 @@ function getComparator(order, orderBy) {
 const getColumns = (row) => Object.keys(row).filter((col) => col !== "id");
 
 export default function EnhancedTable(props) {
-  const { rows, headCells, title, onColumnSelected, onRowSelected } = props;
+  const {
+    rows,
+    headCells,
+    title,
+    onColumnSelected,
+    onRowSelected,
+    onFiltered,
+  } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("grade");
   const [selected, setSelected] = React.useState([]);
@@ -256,9 +264,10 @@ export default function EnhancedTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [allColumns, setAllColumns] = React.useState([]);
   const columns = getColumns(rows?.[0] ?? {});
+  const rowCount = rows?.length || 0;
 
   React.useEffect(() => {
-    if (rows.length && !allColumns.length) {
+    if (rowCount && !allColumns.length) {
       setAllColumns(getColumns(rows[0]));
     }
   }, [rows, allColumns]);
@@ -311,98 +320,106 @@ export default function EnhancedTable(props) {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowCount) : 0;
 
   return (
-    <>
-      <Box sx={{ width: "80%", margin: 16 }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar
-            selected={selected}
-            title={title}
-            columns={allColumns}
-            onColumnSelected={onColumnSelected}
-          />
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={"medium"}
-            >
-              <EnhancedTableHead
-                selected={selected}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-                headCells={headCells}
-              />
-              <TableBody>
-                {rows
-                  .sort(getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
-                    return (
-                      <StyledTableRow
-                        hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row.name}
-                        selected={isItemSelected}
-                      >
-                        <StyledTableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </StyledTableCell>
-                        {columns.map((col) => {
-                          return (
-                            <StyledTableCell align="left" key={col}>
-                              {row[col]}
-                            </StyledTableCell>
-                          );
-                        })}
-                      </StyledTableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: 53 * emptyRows,
-                    }}
-                  >
-                    <StyledTableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </Box>
-    </>
+    <Box sx={{ width: "80%", mx: "auto", my: 8 }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
+        <EnhancedTableToolbar
+          selected={selected}
+          title={title}
+          columns={allColumns}
+          onColumnSelected={onColumnSelected}
+          onFiltered={onFiltered}
+        />
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size={"medium"}
+          >
+            <EnhancedTableHead
+              selected={selected}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rowCount}
+              headCells={headCells}
+            />
+            <TableBody>
+              {rows
+                ?.sort(getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  return (
+                    <StyledTableRow
+                      hover
+                      onClick={(event) => handleClick(event, row.id)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.name}
+                      selected={isItemSelected}
+                    >
+                      <StyledTableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </StyledTableCell>
+                      {columns.map((col) => {
+                        return (
+                          <StyledTableCell align="left" key={col}>
+                            {row[col]}
+                          </StyledTableCell>
+                        );
+                      })}
+                    </StyledTableRow>
+                  );
+                })}
+              {rowCount === 0 && (
+                <TableRow
+                  style={{
+                    height: 53 * emptyRows,
+                  }}
+                >
+                  <StyledTableCell colSpan={6}>No Shit Found</StyledTableCell>
+                </TableRow>
+              )}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 53 * emptyRows,
+                  }}
+                >
+                  <StyledTableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rowCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </Box>
   );
 }
 
 EnhancedTable.propTypes = {
   headCells: PropTypes.array.isRequired,
-  rows: PropTypes.array.isRequired,
+  rows: PropTypes.array,
   title: PropTypes.string.isRequired,
 };

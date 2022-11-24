@@ -34,6 +34,7 @@ app.put("/beavers/:id", db.editBeaver);
 app.get("/grade-statistics", db.getGradeStatistics);
 app.get("/overworked-guardians", db.getOverworkedGuardians);
 app.get("/eager-beaver-guardians", db.getGuardiansWithEagerBeavers);
+app.get("/completionists", db.getCompletionistBeavers);
 
 app.listen(port, () => {
   console.log(`Beaver Scouts listening on port ${port} `);
