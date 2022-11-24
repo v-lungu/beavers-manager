@@ -237,16 +237,16 @@ INSERT INTO Activity(title, completion_date) VALUES ('Whistle', '2020-05-06'),
                                                    ('Story Time', '2021-04-06'),
                                                    ('Bird Watching', '2022-10-10'),
                                                    ('Reading', '2022-10-10'),
-                                                   ('Jellyfish Song', NULL),
-                                                   ('Bear Hunt Song', NULL),
-                                                   ('Hokey Pokey', NULL),
-                                                   ('Penguin song', NULL),
-                                                   ('Vespers', NULL),
+                                                   ('Jellyfish Song', '2022-10-03'),
+                                                   ('Bear Hunt Song', '2022-10-01'),
+                                                   ('Hokey Pokey', '2022-10-10'),
+                                                   ('Penguin song', '2022-10-11'),
+                                                   ('Vespers', '2022-10-10'),
                                                    ('Invisible Bench', NULL),
-                                                   ('Submarine Skit', NULL),
+                                                   ('Submarine Skit', '2022-10-10'),
                                                    ('Ugliest Man in the World', NULL),
                                                    ('Balogna', NULL),
-                                                   ('Gotta Go Wee', NULL);
+                                                   ('Gotta Go Wee', '2022-10-10');
 
 
 INSERT INTO Songs(title, lyrics, type) VALUES ('Jellyfish Song', 'Arms up, wrist together Jellyfish Jellyfish', 'action and repeat after me'),
