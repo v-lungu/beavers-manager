@@ -26,26 +26,28 @@ const style = {
   p: 4,
 };
 
+const DEFAULT_BEAVER = {
+  name: "",
+  grade: "",
+  guardianName: "",
+  email: "",
+  phone: "",
+};
+
 export default function EnhancedModal(props) {
   const { handleClose, open, title, create = false, selected } = props;
   const buttonText = create ? "Add" : "Edit";
-
-  const getDefaultName = () => {
-    if (selected && selected.length) {
-      return selected[0].split("-")[0];
-    }
-  };
-
   const [formInput, setFormInput] = React.useReducer(
     (state, newState) => ({ ...state, ...newState }),
-    {
-      name: "",
-      grade: "",
-      guardianName: "",
-      email: "",
-      phone: "",
-    }
+    { ...DEFAULT_BEAVER }
   );
+
+  React.useEffect(() => {
+    const name = selected?.[0].split("-")?.[0];
+    if (name) {
+      setFormInput({ name });
+    }
+  }, []);
 
   const handleInput = (evt) => {
     const name = evt.target.name;
@@ -75,6 +77,11 @@ export default function EnhancedModal(props) {
     if (create) {
       createBeaver();
     } else if (selected && selected.length) {
+      if (!formInput.name || !formInput.grade) {
+        alert("Please fill out the beaver's information!");
+        return;
+      }
+
       editBeaver();
     }
   };
@@ -103,7 +110,7 @@ export default function EnhancedModal(props) {
             name="name"
             sx={{ mb: 2 }}
             onChange={handleInput}
-            defaultValue={getDefaultName()}
+            value={formInput.name}
           />
         </div>
         <FormControl fullWidth sx={{ mb: 2 }}>
@@ -120,7 +127,7 @@ export default function EnhancedModal(props) {
             <MenuItem value={"JK"}>JK</MenuItem>
             <MenuItem value={"01"}>01</MenuItem>
             <MenuItem value={"02"}>02</MenuItem>
-            <MenuItem value={"02"}>02</MenuItem>
+            <MenuItem value={"03"}>03</MenuItem>
           </Select>
         </FormControl>
 

@@ -8,6 +8,9 @@ import {
   InputLabel,
   MenuItem,
   Button,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 import { FilterList } from "@mui/icons-material";
 import * as React from "react";
@@ -27,21 +30,39 @@ const style = {
 };
 
 export default function FilterModal(props) {
-  const { handleClose, open } = props;
-
+  const { handleClose, open, columns, onColumnSelected } = props;
   const [formInput, setFormInput] = React.useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
+      selectedColumns: [],
       column: "",
       operator: "",
       value: "",
     }
   );
 
+  React.useEffect(() => {
+    setFormInput({ selectedColumns: columns });
+  }, [columns.length]);
+
   const handleInput = (evt) => {
     const name = evt.target.name;
     const newValue = evt.target.value;
     setFormInput({ [name]: newValue });
+  };
+
+  const handleColumnSelected = (column, isChecked) => {
+    let selectedColumns;
+    if (isChecked) {
+      selectedColumns = formInput.selectedColumns.filter(
+        (col) => col !== column
+      );
+    } else {
+      selectedColumns = [...formInput.selectedColumns, column];
+    }
+
+    setFormInput({ selectedColumns });
+    onColumnSelected?.(selectedColumns);
   };
 
   const handleSubmit = (evt) => {
@@ -50,6 +71,7 @@ export default function FilterModal(props) {
     let data = { formInput };
     console.log(data);
   };
+
   return (
     <Modal
       open={open}
@@ -58,9 +80,38 @@ export default function FilterModal(props) {
       aria-describedby="modal-modal-description"
     >
       <Box component="form" noValidate sx={style} onSubmit={handleSubmit}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Filter Beaver List
-        </Typography>
+        {onColumnSelected && (
+          <div>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Select Columns
+            </Typography>
+
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <FormGroup>
+                {columns.map((column) => {
+                  const isChecked = formInput.selectedColumns.includes(column);
+                  return (
+                    <FormControlLabel
+                      key={column}
+                      control={
+                        <Checkbox
+                          key={column}
+                          checked={isChecked}
+                          onChange={() =>
+                            handleColumnSelected(column, isChecked)
+                          }
+                          inputProps={{ "aria-label": "controlled" }}
+                        />
+                      }
+                      label={column}
+                    />
+                  );
+                })}
+              </FormGroup>
+            </FormControl>
+          </div>
+        )}
+
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="grade-select-label">Column</InputLabel>
           <Select

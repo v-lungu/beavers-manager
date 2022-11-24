@@ -41,11 +41,18 @@ function parseGuardians(guardians) {
     ...guardian,
   }));
 }
+
+const fetchJson = async (url) => {
+  const response = await fetch(url);
+  return await response.json();
+};
+
 export default function Beaver() {
   const [beaverRows, setBeaverRows] = React.useState([]);
   const [headCells, setHeadCells] = React.useState([]);
   const [headGuardianCells, setHeadGuardianCells] = React.useState([]);
   const [guardianRows, setGuardianRows] = React.useState([]);
+  const [beaverDetails, setBeaverDetails] = React.useState(null);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -53,28 +60,43 @@ export default function Beaver() {
   const [grade, setGrade] = React.useState("");
   const [color, setColor] = React.useState("");
 
+  const fetchBeavers = async (queryParams) => {
+    const baseUrl = `${BASE_URL}beavers`;
+    const url = queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
+    const beavers = await fetchJson(url);
+    const parsedBeavers = parseBeavers(beavers);
+    setBeaverRows(parsedBeavers);
+    const parsedHeadCells = getHeadCells(beavers);
+    setHeadCells(parsedHeadCells);
+  };
+
+  const fetchGuardian = async (queryParams) => {
+    const baseUrl = `${BASE_URL}guardians`;
+    const url = queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
+    const guardians = await fetchJson(url);
+    const parsedGuardians = parseGuardians(guardians);
+    setGuardianRows(parsedGuardians);
+    setHeadGuardianCells(getHeadCells(guardians));
+  };
+
+  const fetchBeaverDetails = async (email, name) => {};
+
   React.useEffect(() => {
-    const fetchBeavers = async () => {
-      const response = await fetch(`${BASE_URL}beavers`);
-      const beavers = await response.json();
-      const parsedBeavers = parseBeavers(beavers);
-      setBeaverRows(parsedBeavers);
-      const parsedHeadCells = getHeadCells(beavers);
-      setHeadCells(parsedHeadCells);
-    };
-
     fetchBeavers();
-
-    const fetchGuardian = async () => {
-      const response = await fetch(`${BASE_URL}guardians`);
-      const guardians = await response.json();
-      const parsedGuardians = parseGuardians(guardians);
-      setGuardianRows(parsedGuardians);
-      setHeadGuardianCells(getHeadCells(guardians));
-    };
-
     fetchGuardian();
   }, []);
+
+  const handleBeaverColumnSelected = (columns) => {
+    fetchBeavers(`columns=${columns.join(",")}`);
+  };
+
+  const handleBeaverSelected = (beaver) => {
+    console.log(beaver);
+  };
+
+  const handleGuardianColumnSelected = (columns) => {
+    fetchGuardian(`columns=${columns.join(",")}`);
+  };
 
   return (
     <>
@@ -123,18 +145,25 @@ export default function Beaver() {
             name="color"
             onChange={(event) => setColor(event.target.value)}
           >
-            <MenuItem value={"blue"}>Blue</MenuItem>
-            <MenuItem value={"red"}>Red</MenuItem>
-            <MenuItem value={"green"}>Green</MenuItem>
+            <MenuItem value="blue">Blue</MenuItem>
+            <MenuItem value="red">Red</MenuItem>
+            <MenuItem value="green">Green</MenuItem>
           </Select>
         </FormControl>
       </div>
-      <EnhancedTable headCells={headCells} title="Beavers" rows={beaverRows} />
+      <EnhancedTable
+        headCells={headCells}
+        title="Beavers"
+        rows={beaverRows}
+        onColumnSelected={handleBeaverColumnSelected}
+        onRowSelected={handleBeaverSelected}
+      />
       <Divider />
       <EnhancedTable
         headCells={headGuardianCells}
         title="Guardians"
         rows={guardianRows}
+        onColumnSelected={handleGuardianColumnSelected}
       />
       <EnhancedModal
         handleClose={handleClose}

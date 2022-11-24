@@ -6,7 +6,8 @@ const client = new Client({
 client.connect();
 
 const getBeavers = (request, response) => {
-  client.query("SELECT * FROM beaver", (error, results) => {
+  const columns = request?.query?.columns ?? "*";
+  client.query(`SELECT ${columns} FROM beaver`, (error, results) => {
     if (error) {
       throw error;
     }
@@ -15,7 +16,8 @@ const getBeavers = (request, response) => {
 };
 
 const getGuardian = (request, response) => {
-  client.query("SELECT * FROM guardian", (error, results) => {
+  const columns = request?.query?.columns ?? "*";
+  client.query(`SELECT ${columns} FROM guardian`, (error, results) => {
     if (error) {
       throw error;
     }
@@ -63,13 +65,12 @@ const createBeaver = (request, response) => {
 const editBeaver = (request, response) => {
   const id = request.params.id;
   const [nameId, emailId] = id.split("-");
-  const { grade } = request.body;
+  const { grade, name } = request.body;
 
-  client.query("UPDATE beaver SET grade = $1 WHERE name = $2 AND email = $3", [
-    grade,
-    nameId,
-    emailId,
-  ]);
+  client.query(
+    "UPDATE beaver SET grade = $1, name = $2 WHERE name = $3 AND email = $4",
+    [grade, name, nameId, emailId]
+  );
 };
 
 module.exports = {

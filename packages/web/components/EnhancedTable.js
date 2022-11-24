@@ -112,7 +112,7 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  numSelected: PropTypes.number,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
@@ -122,7 +122,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { selected, title } = props;
+  const { selected, title, columns, onColumnSelected } = props;
   const numSelected = selected.length;
   const [open, setOpen] = React.useState(false);
   const [openFilter, setOpenFilter] = React.useState(false);
@@ -203,20 +203,30 @@ function EnhancedTableToolbar(props) {
           </Tooltip>
         )}
       </Toolbar>
-      <EnhancedModal
-        handleClose={handleClose}
-        open={open}
-        title="Edit Beaver"
-        selected={selected}
+
+      {open && selected && (
+        <EnhancedModal
+          handleClose={handleClose}
+          open={true}
+          title="Edit Beaver"
+          selected={selected}
+        />
+      )}
+
+      <FilterModal
+        handleClose={handleCloseFilter}
+        open={openFilter}
+        columns={columns}
+        onColumnSelected={onColumnSelected}
       />
-      <FilterModal handleClose={handleCloseFilter} open={openFilter} />
     </>
   );
 }
 
 EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  numSelected: PropTypes.number,
   title: PropTypes.string.isRequired,
+  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 function descendingComparator(a, b, orderBy) {
@@ -235,13 +245,23 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+const getColumns = (row) => Object.keys(row).filter((col) => col !== "id");
+
 export default function EnhancedTable(props) {
-  const { rows, headCells, title } = props;
+  const { rows, headCells, title, onColumnSelected, onRowSelected } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("grade");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [allColumns, setAllColumns] = React.useState([]);
+  const columns = getColumns(rows?.[0] ?? {});
+
+  React.useEffect(() => {
+    if (rows.length && !allColumns.length) {
+      setAllColumns(getColumns(rows[0]));
+    }
+  }, [rows, allColumns]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -276,6 +296,7 @@ export default function EnhancedTable(props) {
     }
 
     setSelected(newSelected);
+    onRowSelected?.(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -296,7 +317,12 @@ export default function EnhancedTable(props) {
     <>
       <Box sx={{ width: "80%", margin: 16 }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar selected={selected} title={title} />
+          <EnhancedTableToolbar
+            selected={selected}
+            title={title}
+            columns={allColumns}
+            onColumnSelected={onColumnSelected}
+          />
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -319,8 +345,6 @@ export default function EnhancedTable(props) {
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
-                    const cols = Object.keys(row);
-
                     return (
                       <StyledTableRow
                         hover
@@ -340,23 +364,9 @@ export default function EnhancedTable(props) {
                             }}
                           />
                         </StyledTableCell>
-                        {cols.map((col, idx) => {
-                          if (!idx) return;
-                          if (idx == 1) {
-                            return (
-                              <StyledTableCell
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                key={idx}
-                              >
-                                {row[col]}
-                              </StyledTableCell>
-                            );
-                          }
+                        {columns.map((col) => {
                           return (
-                            <StyledTableCell align="left" key={idx}>
+                            <StyledTableCell align="left" key={col}>
                               {row[col]}
                             </StyledTableCell>
                           );
