@@ -31,11 +31,11 @@ BSMP can be used by scout leaders to:
 
 ## Challenges
 
-- [ ] Implementing the UI design in the front end
+- [x] Implementing the UI design in the front end
   - Action plan: Use external libraries like Material UI or Bootstrap
-- [ ] Learning new technology and technical tools
+- [x] Learning new technology and technical tools
   - Action plan: watch tutorials
-- [ ] Lack of TA help because of new tools
+- [x] Lack of TA help because of new tools
   - Action plan: get started early
 
 ## Timeline
