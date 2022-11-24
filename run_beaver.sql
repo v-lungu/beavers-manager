@@ -301,10 +301,7 @@ INSERT INTO CraftAtMeeting(date, name, cost) VALUES ('2022-09-29', 'Paper Airpla
                                                     ('2022-10-13', 'Gumball Caterpillar', 25),
                                                     ('2022-10-27', 'Tube Owl', 50),
                                                     ('2022-11-9', 'Origami', 20);
-<<<<<<< HEAD
 
 
 
 
-=======
->>>>>>> 90dc144 (feat: finish assignment 🔥)
