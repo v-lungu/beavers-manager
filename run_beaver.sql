@@ -55,7 +55,7 @@ CREATE TABLE Leader (
 );
 
 CREATE TABLE Badge (
-  name VARCHAR(50) NOT NULL PRIMARY KEY,
+  name VARCHAR(50) PRIMARY KEY,
   requirements VARCHAR
 );
 
@@ -192,7 +192,14 @@ INSERT INTO Beaver (name, email, grade) VALUES ('Jake', 'mr_jake@gmail.com', 'JK
                                                ('Stacy', 'stacysMom@hotmail.com', '02'),
                                                ('Zuul', 'zuul@zuul.com', '01'),
                                                ('Jimothy', 'generic1997@gmail.com', 'SK'),
-                                               ('Sam', 'momomom@yahoo.ca', '01');
+                                               ('Alice', 'zuul@zuul.com', '03'),
+                                               ('Kyle', 'zuul@zuul.com', '01'),
+                                               ('Vlad', 'zuul@zuul.com', '02'),
+                                               ('Chad', 'mr_jake@gmail.com', '01'),
+                                               ('Chris', 'mr_jake@gmail.com', 'JK'),
+                                               ('Heather', 'mr_jake@gmail.com', '02'),
+                                               ('Logan', 'stacysMom@hotmail.com', 'JK');
+
 
 INSERT INTO MaxSupervised(years_as_leader, max_supervised) VALUES (0, 5),
                                                                   (1, 6),
@@ -276,7 +283,11 @@ INSERT INTO BeaverBadgeProgress(beaver_name, email, badge_name, date_completed) 
                                                                                        ('Stacy', 'stacysMom@hotmail.com', 'Musical Beaver', '2022-09-12'),
                                                                                        ('Zuul', 'zuul@zuul.com', 'Aquatic Skills 1', '2021-08-15'),
                                                                                        ('Jimothy', 'generic1997@gmail.com', 'Paddling Skills 1', NULL),
-                                                                                       ('Jimothy', 'generic1997@gmail.com', 'Olympic Beaver', '2021-11-01');
+                                                                                       ('Alice', 'zuul@zuul.com', 'Olympic Beaver', '2022-11-01'),
+                                                                                       ('Alice', 'zuul@zuul.com', 'Exploring Beaver', '2021-01-01'),
+                                                                                       ('Alice', 'zuul@zuul.com', 'Aquatic Skills 1', '2021-07-01'),
+                                                                                       ('Alice', 'zuul@zuul.com', 'Paddling Skills 1', '2022-05-01'),
+                                                                                       ('Alice', 'zuul@zuul.com', 'Musical Beaver', '2020-10-01');
 
 INSERT INTO Meeting(address, name, date, leaders_available) VALUES ('123 W 16th Avenue', 'Community Center', '2022-09-29', 3),
                                                                    ('123 W 16th Avenue', 'Community Center', '2022-10-06', 2),
@@ -301,10 +312,7 @@ INSERT INTO CraftAtMeeting(date, name, cost) VALUES ('2022-09-29', 'Paper Airpla
                                                     ('2022-10-13', 'Gumball Caterpillar', 25),
                                                     ('2022-10-27', 'Tube Owl', 50),
                                                     ('2022-11-9', 'Origami', 20);
-<<<<<<< HEAD
 
 
 
 
-=======
->>>>>>> 90dc144 (feat: finish assignment 🔥)
