@@ -12,8 +12,8 @@ CREATE TABLE TailColor (
 
 CREATE TABLE Beaver
 (
-	name varchar(20) NOT NULL,
-	email varchar(50) NOT NULL,
+	name varchar(20),
+	email varchar(50),
 	grade char(2),
 	PRIMARY KEY(name, email),
 	FOREIGN KEY(email) references guardian(email)
@@ -36,7 +36,6 @@ CREATE TABLE AccessToBankAccount (
     PRIMARY KEY (role)
 );
 
--- might be a good idea to look at the ON DELETE/UPDATES for Leader, MaxSupervised, and AccessToBankAccount
 CREATE TABLE Leader (
     colony_name VARCHAR(20) PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -102,6 +101,7 @@ CREATE TABLE Learn (
     name VARCHAR(20),
     email VARCHAR(50),
     title VARCHAR(50),
+    PRIMARY KEY (name, email, title),
     FOREIGN KEY (name, email) REFERENCES Beaver(name, email)
                    ON DELETE CASCADE
                    ON UPDATE CASCADE,
@@ -139,12 +139,12 @@ CREATE TABLE MeetingAttendance (
     name VARCHAR(50),
     email VARCHAR(50),
     date DATE,
-    duesPaid BOOLEAN,
+    dues_Paid BOOLEAN,
     PRIMARY KEY (name, email, date),
     FOREIGN KEY (email) REFERENCES Guardian
                                ON DELETE CASCADE
                                ON UPDATE CASCADE,
-    FOREIGN KEY (date) REFERENCES Meeting
+    FOREIGN KEY (date) REFERENCES Meeting(date)
                                ON DELETE CASCADE
                                ON UPDATE CASCADE
 );
@@ -166,14 +166,15 @@ CREATE TABLE CraftAtMeeting (
     date DATE,
     name VARCHAR(50),
     cost INT,
+    PRIMARY KEY (date, name),
     FOREIGN KEY (date) REFERENCES Meeting (date)
                             ON DELETE CASCADE
                             ON UPDATE CASCADE,
-    FOREIGN KEY (name) REFERENCES Craft
+    FOREIGN KEY (name) REFERENCES Craft(name)
                             ON DELETE SET NULL
 );
 
--- POPULATE TABLES WITH DATA
+-- POPULATE TABLES WITH DATA -- 
 
 INSERT INTO Guardian(email, name, phone_number) VALUES ('mr_jake@gmail.com', 'Dan Smith', 4165552012),
                                                       ('stacysMom@hotmail.com', 'Sam White', 9055551121),
@@ -283,7 +284,7 @@ INSERT INTO Meeting(address, name, date, leaders_available) VALUES ('123 W 16th 
                                                                    ('1455 Quebec Street', 'Science World', '2022-10-27', 2),
                                                                    ('212 W 1st Avenue', 'Jericho Beach', '2022-11-9', 4);
 
-INSERT INTO MeetingAttendance(name, email, date, duesPaid) VALUES ('Jake', 'mr_jake@gmail.com', '2022-09-29', TRUE),
+INSERT INTO MeetingAttendance(name, email, date, dues_Paid) VALUES ('Jake', 'mr_jake@gmail.com', '2022-09-29', TRUE),
                                                                   ('Jake', 'mr_jake@gmail.com', '2022-10-06', FALSE),
                                                                   ('Jake', 'mr_jake@gmail.com', '2022-10-13', TRUE),
                                                                   ('Stacy', 'stacysMom@hotmail.com', '2022-09-29', TRUE),
@@ -300,5 +301,7 @@ INSERT INTO CraftAtMeeting(date, name, cost) VALUES ('2022-09-29', 'Paper Airpla
                                                     ('2022-10-13', 'Gumball Caterpillar', 25),
                                                     ('2022-10-27', 'Tube Owl', 50),
                                                     ('2022-11-9', 'Origami', 20);
+
+
 
 
