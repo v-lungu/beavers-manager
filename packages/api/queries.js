@@ -182,11 +182,36 @@ getCompletionistBeavers = (request, response) => {
   );
 };
 
+const getGuardians = (request, response) => {
+  const columns = getQueryParam(request, "columns") ?? "*";
+
+  const column = getQueryParam(request, "column");
+  const rawOperator = getQueryParam(request, "operator");
+  const value = getQueryParam(request, "value");
+  let whereClause = "";
+  if (column && rawOperator && value) {
+    const operator = OPERATORS[rawOperator];
+    if (operator) {
+      whereClause = `WHERE ${column} ${operator} '${value}'`;
+    }
+  }
+
+  client.query(
+    `SELECT ${columns} FROM guardian ${whereClause}`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 module.exports = {
   getBeavers,
   getBeaver,
   createBeaver,
-  getGuardian,
+  getGuardians,
   deleteGuardian,
   editBeaver,
   getGradeStatistics,

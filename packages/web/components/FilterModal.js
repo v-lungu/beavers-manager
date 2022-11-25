@@ -15,8 +15,6 @@ import {
 import { FilterList } from "@mui/icons-material";
 import * as React from "react";
 
-import styles from "../styles/Home.module.css";
-
 const style = {
   position: "absolute",
   top: "50%",
