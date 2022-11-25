@@ -142,6 +142,10 @@ export default function Beaver() {
     fetchBeavers(`column=${column}&operator=${operator}&value=${value}`);
   };
 
+  const handleGuardianFiltered = ({ column, operator, value }) => {
+    fetchGuardian(`column=${column}&operator=${operator}&value=${value}`);
+  };
+
   const handleCreateBeaver = () => {
     handleClose();
     fetchBeavers();
@@ -269,6 +273,7 @@ export default function Beaver() {
         title="Guardians"
         rows={guardianRows}
         onColumnSelected={handleGuardianColumnSelected}
+        onFiltered={handleGuardianFiltered}
       />
 
       {open && (

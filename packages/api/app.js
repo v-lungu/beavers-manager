@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 app.get("/beavers", db.getBeavers);
 app.get("/beavers/:id", db.getBeaver);
 app.post("/beavers", db.createBeaver);
-app.get("/guardians", db.getGuardian);
+app.get("/guardians", db.getGuardians);
 app.delete("/guardians/:email", db.deleteGuardian);
 app.put("/beavers/:id", db.editBeaver);
 app.get("/grade-statistics", db.getGradeStatistics);
