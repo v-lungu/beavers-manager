@@ -145,6 +145,7 @@ function EnhancedTableToolbar(props) {
       });
     };
     deleteGuardian();
+    console.log("deleted");
   };
 
   return (

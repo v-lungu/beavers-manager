@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "Express backend for CPSC 304 project",
+  "description": "Express backend for Beaver Scouts App",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
